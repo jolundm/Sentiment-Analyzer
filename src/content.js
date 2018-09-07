@@ -1,19 +1,18 @@
 var smiley = document.createElement("div");
 smiley.setAttribute("style", "position:absolute;z-index:10000;font-weight:bolder;font-size:100px;margin:-20px 0 0 -20px;");
 smiley.setAttribute("id", "smiley");
-
 var elements = document.getElementsByTagName('body');
 elements[0].appendChild(smiley);
-
+var xmouse = 0, ymouse = 0;
+const thinkingSmiley = "🤔";
 const smilestate = {
     '-1.0': "👿", '-1': "👿", '-0.9': "😡", '-0.8': "😭",
-    '-0.7': "😩", '-0.6': "😖", '-0.5': "😢", '-0.4': "😓", '-0.3': "😔",
-    '-0.2': "😨", '-0.1': "🙁", '0': "😐", '0.1': "🙂", '0.2': "😉", '0.3':
-        "😀", '0.4': "😃", '0.5': "😄", '0.6': "😆", '0.7': "😁", '0.8': "🤗",
+    '-0.7': "😩", '-0.6': "😖", '-0.5': "😢", '-0.4': "😓",
+    '-0.3': "😔", '-0.2': "😨", '-0.1': "🙁", '0': "😐",
+    '0.1': "🙂", '0.2': "😉", '0.3': "😀", '0.4': "😃",
+    '0.5': "😄", '0.6': "😆", '0.7': "😁", '0.8': "🤗",
     '0.9': "😂", '1': "⭐", '1.0': "⭐"
 };
-const thinkingSmiley = "🤔";
-var xmouse = 0, ymouse = 0;
 window.onload = init;
 
 function init() {
@@ -31,8 +30,7 @@ function postTextToGoogle(text) {
     let xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) { updateSmiley(this.responseText); }
-        else { setDefaultSmiley(); }
+        this.readyState === 4 ? updateSmiley(this.responseText) : setDefaultSmiley();
     });
     // Update API KEY below.
     xhr.open("POST", "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment&key=<YOUR_API_KEY_HERE>");
@@ -45,18 +43,17 @@ function postTextToGoogle(text) {
 
 function updateSmiley(googleResponse) {
     let json = JSON.parse(googleResponse);
-    let sScore = json.documentSentiment.score; let sMagnitude = json.documentSentiment.magnitude;
+    let sScore = json.documentSentiment.score;
+    // Optional Usage --> let sMagnitude = json.documentSentiment.magnitude;  
     let elem = document.getElementById("smiley")
     elem.innerHTML = smilestate[sScore];
-    elem.style.top = ymouse + "px";
-    elem.style.left = xmouse + "px";
+    elem.style.top = ymouse + "px"; elem.style.left = xmouse + "px";
 }
 
 function setDefaultSmiley() {
-    let elem = document.getElementById("smiley")
+    let elem = document.getElementById("smiley");
     elem.innerHTML = thinkingSmiley;
-    elem.style.top = ymouse + "px";
-    elem.style.left = xmouse + "px";
+    elem.style.top = ymouse + "px"; elem.style.left = xmouse + "px";
 }
 
 function removeQuotations(text) { return text.replace(/['"]+/g, ''); }
