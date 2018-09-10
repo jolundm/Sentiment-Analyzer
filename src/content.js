@@ -3,6 +3,7 @@ smiley.setAttribute("style", "position:absolute;z-index:10000;font-weight:bolder
 smiley.setAttribute("id", "smiley");
 var elements = document.getElementsByTagName('body');
 elements[0].appendChild(smiley);
+const APIKEY = "asd";
 var xmouse = 0, ymouse = 0;
 const thinkingSmiley = "🤔";
 const smilestate = {
@@ -33,7 +34,7 @@ function postTextToGoogle(text) {
         this.readyState === 4 ? updateSmiley(this.responseText) : setDefaultSmiley();
     });
     // Update API KEY below.
-    xhr.open("POST", "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment&key=<YOUR_API_KEY_HERE>");
+    xhr.open("POST", "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment&key="+APIKEY);
     xhr.setRequestHeader("Authorization", "Basic am9uYXRoYW4ubHVuZG1hcmtAbmV0bGlnaHQuY29tOlN0cmlkZXIwMTY1");
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
