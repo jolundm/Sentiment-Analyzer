@@ -3,7 +3,7 @@ smiley.setAttribute("style", "position:absolute;z-index:10000;font-weight:bolder
 smiley.setAttribute("id", "smiley");
 var elements = document.getElementsByTagName('body');
 elements[0].appendChild(smiley);
-const APIKEY = "asd";
+const API_KEY = "<YOUR_API_KEY_HERE>"; //Insert your API_KEY here.
 var xmouse = 0, ymouse = 0;
 var toggle = false;
 
@@ -35,13 +35,13 @@ function postTextToGoogle(text) {
         this.readyState === 4 ? updateSmiley(this.responseText) : setDefaultSmiley();
     });
     // Update API KEY below.
-    xhr.open("POST", "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment&key="+APIKEY);
+    xhr.open("POST", "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment&key=" + API_KEY);
     xhr.setRequestHeader("Authorization", "Basic am9uYXRoYW4ubHVuZG1hcmtAbmV0bGlnaHQuY29tOlN0cmlkZXIwMTY1");
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.setRequestHeader("Postman-Token", "fbb90407-987e-47f3-afae-10575c402392");
     xhr.send(data);
-	
+
 }
 
 function updateSmiley(googleResponse) {
@@ -50,29 +50,25 @@ function updateSmiley(googleResponse) {
     // Optional Usage --> let sMagnitude = json.documentSentiment.magnitude;  
     let elem = document.getElementById("smiley")
     elem.innerHTML = smilestate[sScore];
-    elem.style.top = ymouse + "px"; 
-	elem.style.left = xmouse + "px";
+    elem.style.top = ymouse + "px";
+    elem.style.left = xmouse + "px";
 }
 
 function setDefaultSmiley() {
     let elem = document.getElementById("smiley");
     elem.innerHTML = thinkingSmiley;
-    elem.style.top = ymouse + "px"; 
-	elem.style.left = xmouse + "px";
+    elem.style.top = ymouse + "px";
+    elem.style.left = xmouse + "px";
 }
 
 function removeQuotations(text) { return text.replace(/['"]+/g, ''); }
 
 document.addEventListener("click", function () {
-	chrome.runtime.sendMessage({greeting: "isActive"}, function(response) {
-		console.log(response.farewell);
-		if(response.farewell) {
-			let selection = window.getSelection().toString();
-			if (selection.length > 10) { postTextToGoogle(removeQuotations(selection)); }
-		}
-		else {
-			let elem = document.getElementById("smiley");
-			elem.innerHTML = "";
-		}
-	});
+    chrome.runtime.sendMessage({ greeting: "isActive" }, function (response) {
+        if (response.isToggled) {
+            let selection = window.getSelection().toString();
+            if (selection.length > 10) { postTextToGoogle(removeQuotations(selection)); }
+        }
+        else { document.getElementById("smiley").innerHTML = ""; }
+    });
 });
