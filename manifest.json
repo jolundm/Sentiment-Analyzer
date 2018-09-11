@@ -23,10 +23,7 @@
             "name": "Filip Byren"
         }
     ],
-    "browser_action": {
-        "default_icon": "res/NeutralFace32.png"
-    },
-    "content_scripts": [
+	"content_scripts": [
         {
             "matches": [
                 "*://*/*"
@@ -37,6 +34,14 @@
             "run_at": "document_end"
         }
     ],
+    "browser_action": {
+        "default_icon": "res/NeutralFace32-Disable.png",
+		"default_title": "Sentiment Analyzer"
+    },
+	"background": {
+		"scripts": ["src/background.js"],
+		"persistent": true 
+	}, 
     "permissions": [
         "activeTab",
         "http://www.google.com/",

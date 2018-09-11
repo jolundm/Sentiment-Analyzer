@@ -4,15 +4,16 @@ smiley.setAttribute("id", "smiley");
 var elements = document.getElementsByTagName('body');
 elements[0].appendChild(smiley);
 var xmouse = 0, ymouse = 0;
-const thinkingSmiley = "🤔";
+var toggle = false;
+
 const smilestate = {
     '-1.0': "👿", '-1': "👿", '-0.9': "😡", '-0.8': "😭",
-    '-0.7': "😩", '-0.6': "😖", '-0.5': "😢", '-0.4': "😓",
-    '-0.3': "😔", '-0.2': "😨", '-0.1': "🙁", '0': "😐",
-    '0.1': "🙂", '0.2': "😉", '0.3': "😀", '0.4': "😃",
-    '0.5': "😄", '0.6': "😆", '0.7': "😁", '0.8': "🤗",
+    '-0.7': "😩", '-0.6': "😖", '-0.5': "😢", '-0.4': "😓", '-0.3': "😔",
+    '-0.2': "😨", '-0.1': "🙁", '0': "😐", '0.1': "🙂", '0.2': "😉", '0.3':
+        "😀", '0.4': "😃", '0.5': "😄", '0.6': "😆", '0.7': "😁", '0.8': "🤗",
     '0.9': "😂", '1': "⭐", '1.0': "⭐"
 };
+const thinkingSmiley = "🤔";
 window.onload = init;
 
 function init() {
@@ -33,12 +34,13 @@ function postTextToGoogle(text) {
         this.readyState === 4 ? updateSmiley(this.responseText) : setDefaultSmiley();
     });
     // Update API KEY below.
-    xhr.open("POST", "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment&key=<YOUR_API_KEY_HERE>");
+    xhr.open("POST", "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment&key=AIzaSyC__6ji-CHjg6a_h0_3h_UOHbdOSi4gOPM");
     xhr.setRequestHeader("Authorization", "Basic am9uYXRoYW4ubHVuZG1hcmtAbmV0bGlnaHQuY29tOlN0cmlkZXIwMTY1");
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.setRequestHeader("Postman-Token", "fbb90407-987e-47f3-afae-10575c402392");
     xhr.send(data);
+	
 }
 
 function updateSmiley(googleResponse) {
@@ -47,18 +49,29 @@ function updateSmiley(googleResponse) {
     // Optional Usage --> let sMagnitude = json.documentSentiment.magnitude;  
     let elem = document.getElementById("smiley")
     elem.innerHTML = smilestate[sScore];
-    elem.style.top = ymouse + "px"; elem.style.left = xmouse + "px";
+    elem.style.top = ymouse + "px"; 
+	elem.style.left = xmouse + "px";
 }
 
 function setDefaultSmiley() {
     let elem = document.getElementById("smiley");
     elem.innerHTML = thinkingSmiley;
-    elem.style.top = ymouse + "px"; elem.style.left = xmouse + "px";
+    elem.style.top = ymouse + "px"; 
+	elem.style.left = xmouse + "px";
 }
 
 function removeQuotations(text) { return text.replace(/['"]+/g, ''); }
 
 document.addEventListener("click", function () {
-    let selection = window.getSelection().toString();
-    if (selection.length > 10) { postTextToGoogle(removeQuotations(selection)); }
+	chrome.runtime.sendMessage({greeting: "isActive"}, function(response) {
+		console.log(response.farewell);
+		if(response.farewell) {
+			let selection = window.getSelection().toString();
+			if (selection.length > 10) { postTextToGoogle(removeQuotations(selection)); }
+		}
+		else {
+			let elem = document.getElementById("smiley");
+			elem.innerHTML = "";
+		}
+	});
 });
