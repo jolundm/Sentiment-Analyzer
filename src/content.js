@@ -1,12 +1,11 @@
-var smiley = document.createElement("div");
+const smiley = document.createElement("div");
 smiley.setAttribute("style", "position:absolute;z-index:10000;font-weight:bolder;font-size:100px;margin:-20px 0 0 -20px;");
 smiley.setAttribute("id", "smiley");
-var elements = document.getElementsByTagName('body');
+let elements = document.getElementsByTagName('body');
 elements[0].appendChild(smiley);
 const API_KEY = "<YOUR_API_KEY_HERE>"; //Insert your API_KEY here.
-var xmouse = 0, ymouse = 0;
-var toggle = false;
-
+let xmouse = 0, ymouse = 0;
+let toggle = false;
 const smilestate = {
     '-1.0': "👿", '-1': "👿", '-0.9': "😡", '-0.8': "😭",
     '-0.7': "😩", '-0.6': "😖", '-0.5': "😢", '-0.4': "😓", '-0.3': "😔",
