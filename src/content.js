@@ -14,6 +14,7 @@ const smilestate = {
     '0.9': "😂", '1': "⭐", '1.0': "⭐"
 };
 const thinkingSmiley = "🤔";
+
 window.onload = init;
 
 function init() {
